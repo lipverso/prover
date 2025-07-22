@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Analisador de Frases</title>
+</h:head>
+<h:body>
+    <h:form>
+        <h3>Digite sua frase:</h3>
+        <p:inputTextarea value="#{fraseController.frase}" rows="3" cols="60"/>
+
+        <p:commandButton value="Analisar" action="#{fraseController.analisar}" update="resultado"/>
+
+        <h:panelGroup id="resultado">
+            <h:panelGrid columns="1" rendered="#{not empty fraseController.resultado}">
+                <h4>Total de palavras distintas: #{fraseController.qtdPalavrasDistintas}</h4>
+                <p:dataTable value="#{fraseController.resultado.entrySet().toArray()}" var="entry">
+                    <p:column headerText="Palavra">
+                        #{entry.key}
+                    </p:column>
+                    <p:column headerText="Ocorrências">
+                        #{entry.value}
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:panelGroup>
+    </h:form>
+</h:body>
+</html>
