@@ -5,27 +5,63 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Analisador de Frases</title>
+    <h:outputStylesheet>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f9f9f9;
+        }
+        .analisador-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .titulo {
+        color: #3f51b5;
+        margin-bottom: 20px;
+        }
+        .botao-analisar {
+        margin-top: 10px;
+        }
+    </h:outputStylesheet>
 </h:head>
 <h:body>
+    <h:panelGroup layout="block" style="text-align: center; margin-top: 20px;">
+        <h:graphicImage library="images" name="logo.png" style="max-width: 300px;" />
+    </h:panelGroup>
     <h:form>
-        <h3>Digite sua frase:</h3>
-        <p:inputTextarea value="#{fraseController.frase}" rows="3" cols="60"/>
+        <div class="analisador-container">
+            <h2 class="titulo">Analisador de Frases</h2>
+            <br/>
+            <p:outputLabel value="Digite sua frase:" for="inputFrase" />
+            <br/>
+            <p:inputTextarea id="inputFrase" value="#{fraseController.frase}" rows="3" cols="60" autoResize="false" />
+            <br/>
+            <p:commandButton value="Analisar"
+                             icon="pi pi-search"
+                             action="#{fraseController.analisar}"
+                             update="resultado"
+                             styleClass="botao-analisar ui-button-raised ui-button-primary" />
 
-        <p:commandButton value="Analisar" action="#{fraseController.analisar}" update="resultado"/>
+            <h:panelGroup id="resultado">
+                <p:separator rendered="#{not empty fraseController.resultado}" />
+                <h3>Total de palavras distintas: <strong>#{fraseController.qtdPalavrasDistintas}</strong></h3>
 
-        <h:panelGroup id="resultado">
-            <h:panelGrid columns="1" rendered="#{not empty fraseController.resultado}">
-                <h4>Total de palavras distintas: #{fraseController.qtdPalavrasDistintas}</h4>
-                <p:dataTable value="#{fraseController.resultado.entrySet().toArray()}" var="entry">
+                <p:dataTable value="#{fraseController.resultado.entrySet().toArray()}" var="entry"
+                             rendered="#{not empty fraseController.resultado}"
+                             styleClass="ui-datatable-striped ui-datatable-hoverable">
                     <p:column headerText="Palavra">
-                        #{entry.key}
+                        <h:outputText value="#{entry.key}" />
                     </p:column>
                     <p:column headerText="Ocorrências">
-                        #{entry.value}
+                        <h:outputText value="#{entry.value}" />
                     </p:column>
                 </p:dataTable>
-            </h:panelGrid>
-        </h:panelGroup>
+            </h:panelGroup>
+        </div>
     </h:form>
 </h:body>
 </html>
